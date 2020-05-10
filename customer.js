@@ -15,7 +15,8 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if(err) throw err;
     inStock();
-    connection.end();
+    setTimeout(userPrompt, 100);
+    // connection.end();
 });
 
 function inStock() {
@@ -34,5 +35,42 @@ function inStock() {
             );
         }
         console.log(table.toString());
+    });
+};
+
+function userPrompt() {
+    inquirer
+    .prompt([
+        {
+            type: "input",
+            message: "Please enter the Product Number for the item you would like to purchase.",
+            name: "prodSku"
+        },
+        {
+            type: "input",
+            message: "How many would you like to purchase?",
+            name: "quantity"
+        }
+    ])
+    .then(function(response) {
+        connection.query("SELECT stock_quantity FROM products WHERE sku = ?",
+        [response.prodSku],
+        function(err,res) {
+            if(err) throw err;
+            if(res[0].stock_quantity < response.quantity){
+                console.log("I'm sorry, we only have "  + res[0].stock_quantity + " in stock.");
+            } else {
+                connection.query("UPDATE products SET ? WHERE ?",
+            [
+                {
+                    stock_quantity: res[0].stock_quantity - response.quantity
+                },
+                {
+                    sku: response.prodSku
+                }
+            ],
+            );
+            }
+        });
     });
 };

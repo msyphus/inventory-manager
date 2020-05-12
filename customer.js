@@ -54,7 +54,7 @@ function userPrompt() {
     .then(function(response) {
         connection.query("SELECT stock_quantity, price FROM products WHERE sku = ?",
         [response.prodSku],
-        function(err,res) {
+        function(err, res) {
             if(err) throw err;
             if(res[0].stock_quantity < response.quantity){
                 console.log("I'm sorry, we only have "  + res[0].stock_quantity + " in stock.");

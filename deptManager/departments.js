@@ -56,4 +56,32 @@ function viewDepts() {
         console.log(table.toString());
         connection.end();
     })
-}
+};
+
+function newDept() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "Please enter the department name.",
+                name: "deptName"
+            },
+            {
+                type: "input",
+                message: "What are the overhead costs?",
+                name: "costs"
+            }
+        ])
+        .then(function(response) {
+            connection.query("INSERT INTO departments SET ?",
+            [
+                {
+                    dept_name: response.deptName,
+                    overhead: response.costs,
+                    prod_sales: 0
+                }
+            ],
+            );
+            viewDepts();
+        });
+};

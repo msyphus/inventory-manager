@@ -30,7 +30,7 @@ function inStock() {
         console.log("----- Products in Stock -----".bold.brightYellow);
         for(var i = 0; i < res.length; i++){
             table.push(
-                [res[i].sku, res[i].product_name, res[i].department, res[i].price, res[i].stock_quantity]
+                [res[i].sku, res[i].product_name, res[i].department, res[i].price.toFixed(2), res[i].stock_quantity]
             );
         }
         console.log(table.toString());

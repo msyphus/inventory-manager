@@ -1,0 +1,59 @@
+var mysql = require("mysql");
+var inquirer = require("inquirer");
+var Table = require("cli-table");
+var colors = require("colors");
+var sqlpass = require("../assets/key");
+
+var connection = mysql.createConnection({
+    host: "localhost",
+    port: 3308,
+    user: "root",
+    password: sqlpass.password.pass,
+    database: "inventory"
+});
+
+connection.connect(function(err) {
+    if(err) throw err;
+    userPrompt();
+});
+
+function userPrompt() {
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                message: "What would you like to do?",
+                choices: ["View Sales By Department", "Create New Department"],
+                name: "task"
+            }
+        ])
+        .then(function(response) {
+            switch(response.task) {
+                case "View Sales By Department":
+                    viewDepts();
+                    break;
+                case "Create New Department":
+                    newDept();
+            };
+        });
+};
+
+function viewDepts() {
+    connection.query("SELECT * FROM departments",
+    function(err,res) {
+        if(err) throw err;
+        var table = new Table({
+            head: ["Department ID".bold.brightYellow, "Department Name".bold.brightYellow, "Overhead Costs".bold.brightYellow, "Product Sales".bold.brightYellow],
+            colWidths: [20, 20, 20, 20]
+        });
+
+        console.log("----- Sales By Department -----".bold.brightYellow);
+        for(var i = 0; i < res.length; i++){
+            table.push(
+                [res[i].dept_id, res[i].dept_name, res[i].overhead, res[i].prod_sales]
+            );
+        }
+        console.log(table.toString());
+        connection.end();
+    })
+}

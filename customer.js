@@ -52,13 +52,13 @@ function userPrompt() {
         }
     ])
     .then(function(response) {
-        connection.query("SELECT stock_quantity, price FROM products WHERE sku = ?",
+        connection.query("SELECT stock_quantity, price, department FROM products WHERE sku = ?",
         [response.prodSku],
         function(err, res) {
             if(err) throw err;
             if(res[0].stock_quantity < response.quantity){
                 console.log("I'm sorry, we only have "  + res[0].stock_quantity + " in stock.");
-                connection.end();
+                disconnect();
             } else {
                 connection.query("UPDATE products SET ? WHERE ?",
             [
@@ -72,8 +72,29 @@ function userPrompt() {
             );
             var subtotal = res[0].price * response.quantity;
             console.log("Your total will be $" + subtotal);
-            connection.end();    
+            var dept = res[0].department;
+            connection.query("SELECT prod_sales FROM departments WHERE dept_name = ?",
+            [dept],
+            function(err, res) {
+                if(err) throw err;
+                console.log(dept);
+                connection.query("UPDATE departments SET ? WHERE ?",
+                [
+                    {
+                        prod_sales: subtotal + res[0].prod_sales
+                    },
+                    {
+                        dept_name: dept
+                    }
+                ],
+                );
+            });
+            setTimeout(disconnect, 3000);   
             }
         });
     });
+};
+
+function disconnect() {
+    connection.end();
 };

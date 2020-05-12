@@ -16,7 +16,6 @@ connection.connect(function(err) {
     if(err) throw err;
     inStock();
     setTimeout(userPrompt, 100);
-    // connection.end();
 });
 
 function inStock() {
@@ -53,12 +52,13 @@ function userPrompt() {
         }
     ])
     .then(function(response) {
-        connection.query("SELECT stock_quantity FROM products WHERE sku = ?",
+        connection.query("SELECT stock_quantity, price FROM products WHERE sku = ?",
         [response.prodSku],
         function(err,res) {
             if(err) throw err;
             if(res[0].stock_quantity < response.quantity){
                 console.log("I'm sorry, we only have "  + res[0].stock_quantity + " in stock.");
+                connection.end();
             } else {
                 connection.query("UPDATE products SET ? WHERE ?",
             [
@@ -70,6 +70,9 @@ function userPrompt() {
                 }
             ],
             );
+            var subtotal = res[0].price * response.quantity;
+            console.log("Your total will be $" + subtotal);
+            connection.end();    
             }
         });
     });

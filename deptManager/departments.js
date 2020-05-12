@@ -43,14 +43,14 @@ function viewDepts() {
     function(err,res) {
         if(err) throw err;
         var table = new Table({
-            head: ["Department ID".bold.brightYellow, "Department Name".bold.brightYellow, "Overhead Costs".bold.brightYellow, "Product Sales".bold.brightYellow],
-            colWidths: [20, 20, 20, 20]
+            head: ["Department ID".bold.brightYellow, "Department Name".bold.brightYellow, "Overhead Costs".bold.brightYellow, "Product Sales".bold.brightYellow, "Profit/Loss".bold.brightYellow],
+            colWidths: [20, 20, 20, 20, 20]
         });
 
         console.log("----- Sales By Department -----".bold.brightYellow);
         for(var i = 0; i < res.length; i++){
             table.push(
-                [res[i].dept_id, res[i].dept_name, res[i].overhead, res[i].prod_sales]
+                [res[i].dept_id, res[i].dept_name, res[i].overhead, res[i].prod_sales, res[i].prod_sales - res[i].overhead]
             );
         }
         console.log(table.toString());

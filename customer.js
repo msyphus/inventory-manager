@@ -58,7 +58,7 @@ function userPrompt() {
             if(err) throw err;
             if(res[0].stock_quantity < response.quantity){
                 console.log("I'm sorry, we only have "  + res[0].stock_quantity + " in stock.");
-                disconnect();
+                renewPrompt();
             } else {
                 connection.query("UPDATE products SET ? WHERE ?",
             [
@@ -77,7 +77,6 @@ function userPrompt() {
             [dept],
             function(err, res) {
                 if(err) throw err;
-                console.log(dept);
                 connection.query("UPDATE departments SET ? WHERE ?",
                 [
                     {
@@ -89,10 +88,31 @@ function userPrompt() {
                 ],
                 );
             });
-            setTimeout(disconnect, 3000);   
+            renewPrompt();  
             }
         });
     });
+};
+
+function renewPrompt() {
+    inquirer
+        .prompt([
+            {
+                type: "confirm",
+                message: "Is there anything else you would like to buy?",
+                name: "continue",
+                default: true
+            }
+        ])
+        .then(function(response) {
+            if(response.continue) {
+                inStock();
+                setTimeout(userPrompt, 1000);
+            } else {
+                console.log("Thank you for shopping with us.  Have a nice day!")
+                disconnect();
+            }
+        });
 };
 
 function disconnect() {

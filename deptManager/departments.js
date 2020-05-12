@@ -50,7 +50,7 @@ function viewDepts() {
         console.log("----- Sales By Department -----".bold.brightYellow);
         for(var i = 0; i < res.length; i++){
             table.push(
-                [res[i].dept_id, res[i].dept_name, res[i].overhead, res[i].prod_sales, res[i].prod_sales - res[i].overhead]
+                [res[i].dept_id, res[i].dept_name, res[i].overhead, res[i].prod_sales, (res[i].prod_sales - res[i].overhead).toFixed(0)]
             );
         }
         console.log(table.toString());

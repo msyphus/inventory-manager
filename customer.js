@@ -80,7 +80,7 @@ function userPrompt() {
                 connection.query("UPDATE departments SET ? WHERE ?",
                 [
                     {
-                        prod_sales: subtotal + res[0].prod_sales
+                        prod_sales: (subtotal + res[0].prod_sales).toFixed(0)
                     },
                     {
                         dept_name: dept

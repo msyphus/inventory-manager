@@ -54,7 +54,7 @@ function viewDepts() {
             );
         }
         console.log(table.toString());
-        connection.end();
+        renewPrompt();
     })
 };
 
@@ -84,4 +84,28 @@ function newDept() {
             );
             viewDepts();
         });
+};
+
+function renewPrompt() {
+    inquirer
+        .prompt([
+            {
+                type: "confirm",
+                message: "Is there anything else you would like to do?",
+                name: "continue",
+                default: true
+            }
+        ])
+        .then(function(response) {
+            if(response.continue) {
+                userPrompt();
+            } else {
+                console.log("Keep up the good work!")
+                disconnect();
+            }
+        });
+};
+
+function disconnect() {
+    connection.end();
 };

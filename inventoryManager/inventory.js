@@ -60,7 +60,7 @@ function viewProducts() {
             );
         }
         console.log(table.toString());
-        connection.end();
+        renewPrompt();
     });
 };
 
@@ -79,7 +79,7 @@ function lowInventory() {
             );
         }
         console.log(lowTable.toString());
-        connection.end();
+        setTimeout(renewPrompt, 500);
     });
 };
 
@@ -167,4 +167,28 @@ function addProduct() {
             );
             viewProducts();
         });
+};
+
+function renewPrompt() {
+    inquirer
+        .prompt([
+            {
+                type: "confirm",
+                message: "Is there anything else you would like to do?",
+                name: "continue",
+                default: true
+            }
+        ])
+        .then(function(response) {
+            if(response.continue) {
+                userPrompt();
+            } else {
+                console.log("Keep up the good work!")
+                disconnect();
+            }
+        });
+};
+
+function disconnect() {
+    connection.end();
 };

@@ -127,6 +127,13 @@ function addInventory() {
 };
 
 function addProduct() {
+    connection.query("SELECT dept_name FROM departments",
+    function(err, res) {
+        if(err) throw err;
+        var deptArr = [];
+        for (var y = 0; y < res.length; y++) {
+            deptArr.push(res[y].dept_name);   
+        };
     inquirer
         .prompt([
             {
@@ -137,7 +144,7 @@ function addProduct() {
             {
                 type: "checkbox",
                 message: "Please select the department.",
-                choices: ["Electronics", "Food", "Pet", "Toys"],
+                choices: deptArr,
                 name: "dept"
             },
             {
@@ -167,6 +174,7 @@ function addProduct() {
             );
             viewProducts();
         });
+    });
 };
 
 function renewPrompt() {

@@ -2,7 +2,7 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require("cli-table");
 var colors = require("colors");
-var sqlpass = require("./assets/key");
+var sqlpass = require("./key");
 
 var connection = mysql.createConnection({
     host: "localhost",

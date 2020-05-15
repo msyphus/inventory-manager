@@ -1,7 +1,7 @@
 # Store Manager Simulation
 
 ### Demo
-Since this is a back-end application, testing the app cannot be done without proper setup.  You can view a video demo [here.](https://youtu.be/aOX4Em-rMhk)
+Since this is a back-end application, the app cannot be deployed on Git Hub Pages.  You can view a video demo [here.](https://youtu.be/aOX4Em-rMhk)
 
 ### General Information
 This app simulates a store operation with interaction between customers, inventory clerks, and the store manager.  Each of these users has their own file (customer.js, inventory.js, and departments.js) stored in separate locations and connected to each other through a database on a server.  Changes made in one file affect data displayed in the other files.
